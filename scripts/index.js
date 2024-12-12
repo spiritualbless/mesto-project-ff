@@ -1,3 +1,5 @@
+//  темлейт карточки, работа с DOM узлами и функция для удаления карточки :}
+
 function createCard(cardTemp){
     const template = document.querySelector('#card-template').content;
     const cardElement = template.cloneNode(true).querySelector('.card');
@@ -12,19 +14,24 @@ function createCard(cardTemp){
 
     deleteButton.addEventListener('click', () => {
             cardElement.remove();
-        });
+    });
 
     return cardElement;
 }
+
+// функция для создания карточки :O
 
 function renderCards(cards){
     const cardsContainer = document.querySelector('.places__list');
     cards.forEach(function (cardTemp) {
             const cardElement = createCard(cardTemp);
+
             cardsContainer.appendChild(cardElement);
-        });
+    });
 }
 
 const cardArr = initialCards;
+
+// вынос карточек на страницу :x 
 
 renderCards(cardArr);
