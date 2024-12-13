@@ -21,16 +21,15 @@ function createCard(cardTemp, deleteCard){
 
 // функция для создания карточки :O
 
+const cardsContainer = document.querySelector('.places__list');
+
 function renderCards(cards){
-    const cardsContainer = document.querySelector('.places__list');
     cards.forEach(function (cardTemp) {
             const cardElement = createCard(cardTemp, deleteCard);
 
             cardsContainer.appendChild(cardElement);
     });
 }
-
-const cardArr = initialCards;
 
 // функция для удаления карточки ;)
 
@@ -40,4 +39,4 @@ function deleteCard(cardElement){
 
 // вынос карточек на страницу :x 
 
-renderCards(cardArr);
+renderCards(initialCards);
