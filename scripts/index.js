@@ -1,6 +1,6 @@
-//  темлейт карточки, работа с DOM узлами и функция для удаления карточки :}
+//  темлейт карточки, работа с DOM узлами :}
 
-function createCard(cardTemp){
+function createCard(cardTemp, deleteCard){
     const template = document.querySelector('#card-template').content;
     const cardElement = template.cloneNode(true).querySelector('.card');
 
@@ -13,7 +13,7 @@ function createCard(cardTemp){
     cardTitle.textContent = cardTemp.name;
 
     deleteButton.addEventListener('click', () => {
-            cardElement.remove();
+            deleteCard(cardElement);
     });
 
     return cardElement;
@@ -24,13 +24,19 @@ function createCard(cardTemp){
 function renderCards(cards){
     const cardsContainer = document.querySelector('.places__list');
     cards.forEach(function (cardTemp) {
-            const cardElement = createCard(cardTemp);
+            const cardElement = createCard(cardTemp, deleteCard);
 
             cardsContainer.appendChild(cardElement);
     });
 }
 
 const cardArr = initialCards;
+
+// функция для удаления карточки ;)
+
+function deleteCard(cardElement){
+    cardElement.remove();
+}
 
 // вынос карточек на страницу :x 
 
