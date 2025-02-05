@@ -1,46 +1,62 @@
 import './pages/index.css';
 import './components/cards.js';
-import { initialCards } from './components/cards.js'; 
+import './components/modal.js';
+import './components/profile.js';
 
-//  темлейт карточки, работа с DOM узлами :}
+import { createCard, handleLikeButtonClick } from './components/cards.js';
+import { openPopup, closePopup, closePopupOnOverlay } from './components/modal.js';
+import { setupProfileForm } from './components/profile.js';
 
-function createCard(cardTemp, deleteCard){
-    const template = document.querySelector('#card-template').content;
-    const cardElement = template.cloneNode(true).querySelector('.card');
+const editProfilePopup = document.querySelector('.popup_type_edit');
+const newCardPopup = document.querySelector('.popup_type_new-card');
+const imagePopup = document.querySelector('.popup_type_image');
 
-    const cardImage = cardElement.querySelector('.card__image');
-    const cardTitle = cardElement.querySelector('.card__title');
-    const deleteButton = cardElement.querySelector('.card__delete-button');
-
-    cardImage.src = cardTemp.link;
-    cardImage.alt = cardTemp.name;
-    cardTitle.textContent = cardTemp.name;
-
-    deleteButton.addEventListener('click', () => {
-            deleteCard(cardElement);
-    });
-
-    return cardElement;
-}
-
-// функция для создания карточки :O
-
+const editButton = document.querySelector('.profile__edit-button');
+const addButton = document.querySelector('.profile__add-button');
 const cardsContainer = document.querySelector('.places__list');
 
-function renderCards(cards){
-    cards.forEach(function (cardTemp) {
-            const cardElement = createCard(cardTemp, deleteCard);
+const profileTitle = document.querySelector('.profile__title');
+const profileDescription = document.querySelector('.profile__description');
 
-            cardsContainer.appendChild(cardElement);
+const openProfilePopup = setupProfileForm(editProfilePopup, profileTitle, profileDescription);
+editButton.addEventListener('click', openProfilePopup);
+
+document.querySelectorAll('.popup__close').forEach(button => {
+    button.addEventListener('click', (evt) => {
+        closePopup(evt.target.closest('.popup'));
     });
+});
+document.querySelectorAll('.popup').forEach(popup => {
+    popup.addEventListener('click', closePopupOnOverlay);
+});
+
+function handleImageClick(name, link) {
+    const popup = document.querySelector('.popup_type_image');
+    const popupImage = popup.querySelector('.popup__image');
+    const popupCaption = popup.querySelector('.popup__caption');
+
+    popupImage.src = link;
+    popupImage.alt = name;
+    popupCaption.textContent = name;
+
+    openPopup(popup);
 }
 
-// функция для удаления карточки ;)
+const newCardForm = newCardPopup.querySelector('.popup__form');
+const cardNameInput = newCardPopup.querySelector('.popup__input_type_card-name');
+const cardLinkInput = newCardPopup.querySelector('.popup__input_type_url');
 
-function deleteCard(cardElement){
-    cardElement.remove();
-}
+newCardForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    
+    const name = cardNameInput.value;
+    const link = cardLinkInput.value;
 
-// вынос карточек на страницу :x 
+    const newCard = createCard(name, link, handleImageClick, handleLikeButtonClick);
+    cardsContainer.prepend(newCard);
 
-renderCards(initialCards);
+    newCardForm.reset();
+    closePopup(newCardPopup);
+});
+
+addButton.addEventListener('click', () => openPopup(newCardPopup));
