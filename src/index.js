@@ -1,9 +1,8 @@
 import './pages/index.css';
-import './components/cards.js';
-import './components/modal.js';
-import './components/profile.js';
+import { initialCards } from './components/cards.js';
 
-import { createCard, handleLikeButtonClick } from './components/cards.js';
+
+import { createCard, deleteCard, handleLikeButtonClick } from './components/card.js';
 import { openPopup, closePopup, closePopupOnOverlay } from './components/modal.js';
 import { setupProfileForm } from './components/profile.js';
 
@@ -30,6 +29,35 @@ document.querySelectorAll('.popup').forEach(popup => {
     popup.addEventListener('click', closePopupOnOverlay);
 });
 
+const newCardForm = newCardPopup.querySelector('.popup__form');
+const cardNameInput = newCardPopup.querySelector('.popup__input_type_card-name');
+const cardLinkInput = newCardPopup.querySelector('.popup__input_type_url');
+
+newCardForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    
+    const name = cardNameInput.value;
+    const link = cardLinkInput.value;
+
+    const newCard = createCard(name, link, handleImageClick, handleLikeButtonClick, deleteCard);
+    cardsContainer.prepend(newCard);
+
+    newCardForm.reset();
+    closePopup(newCardPopup);
+});
+
+addButton.addEventListener('click', () => openPopup(newCardPopup));
+
+function renderCards(cards) {
+    cards.forEach(function (cardTemp) {
+        const cardElement = createCard(cardTemp.name, cardTemp.link, handleImageClick, handleLikeButtonClick, deleteCard);
+
+        cardsContainer.appendChild(cardElement);
+    });
+}
+
+renderCards(initialCards);
+
 function handleImageClick(name, link) {
     const popup = document.querySelector('.popup_type_image');
     const popupImage = popup.querySelector('.popup__image');
@@ -41,22 +69,3 @@ function handleImageClick(name, link) {
 
     openPopup(popup);
 }
-
-const newCardForm = newCardPopup.querySelector('.popup__form');
-const cardNameInput = newCardPopup.querySelector('.popup__input_type_card-name');
-const cardLinkInput = newCardPopup.querySelector('.popup__input_type_url');
-
-newCardForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
-    
-    const name = cardNameInput.value;
-    const link = cardLinkInput.value;
-
-    const newCard = createCard(name, link, handleImageClick, handleLikeButtonClick);
-    cardsContainer.prepend(newCard);
-
-    newCardForm.reset();
-    closePopup(newCardPopup);
-});
-
-addButton.addEventListener('click', () => openPopup(newCardPopup));
