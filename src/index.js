@@ -29,6 +29,8 @@ const formEditProfile = document.forms["edit-profile"];
 const formEditAvatar = document.forms["edit-avatar"];
 const formAddCard = document.forms["new-place"];
 
+const btnPopup = formEditProfile.querySelector(".popup__button")
+
 const validationSettings = {
     formSelector: ".popup__form",
     inputSelector: ".popup__input",
@@ -58,7 +60,7 @@ enableValidation(validationSettings);
 
 const submitProfileForm = (evt) => {
     evt.preventDefault();
-    toggleLoadingState(true, formEditProfile.querySelector(".popup__button"));
+    toggleLoadingState(true, btnPopup);
     updateUser({
         name: formEditProfile.name.value,
         about: formEditProfile.description.value,
@@ -69,7 +71,7 @@ const submitProfileForm = (evt) => {
             closePopup(popupEditProfile);
         })
         .catch(console.error)
-        .finally(() => toggleLoadingState(false, formEditProfile.querySelector(".popup__button")));
+        .finally(() => toggleLoadingState(false, btnPopup));
 };
 
 formEditProfile.addEventListener("submit", submitProfileForm);
@@ -83,14 +85,14 @@ btnEditProfile.addEventListener("click", () => {
 
 const submitAvatarForm = (evt) => {
     evt.preventDefault();
-    toggleLoadingState(true, formEditAvatar.querySelector(".popup__button"));
+    toggleLoadingState(true, btnPopup);
     updateUserAvatar(formEditAvatar.link.value)
         .then((userData) => {
             btnEditAvatar.style.backgroundImage = `url(${userData.avatar})`;
             closePopup(popupChangeAvatar);
         })
         .catch(console.error)
-        .finally(() => toggleLoadingState(false, formEditAvatar.querySelector(".popup__button")));
+        .finally(() => toggleLoadingState(false, btnPopup));
 };
 formEditAvatar.addEventListener("submit", submitAvatarForm);
 
@@ -102,7 +104,7 @@ btnEditAvatar.addEventListener("click", () => {
 
 const submitNewCardForm = (evt) => {
     evt.preventDefault();
-    toggleLoadingState(true, popupNewCard.querySelector(".popup__button"));
+    toggleLoadingState(true, btnPopup);
     const name = formAddCard.elements.name.value;
     const link = formAddCard.elements.link.value;
     addCard({ name, link })
@@ -112,7 +114,7 @@ const submitNewCardForm = (evt) => {
             closePopup(popupNewCard);
         })
         .catch(console.error)
-        .finally(() => toggleLoadingState(false, formAddCard.querySelector(".popup__button")));
+        .finally(() => toggleLoadingState(false, btnPopup));
 };
 
 formAddCard.addEventListener("submit", submitNewCardForm);
