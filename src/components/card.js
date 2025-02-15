@@ -1,9 +1,9 @@
 import { addLike, deleteLike } from "./api.js";
 
-const template = document.querySelector("#card-template").content;
-const cardTemplate = template.querySelector('.card');
+export function createCard(element, userId, removeCard, likeCard, openPopupImage) { 
 
-export function createCard(item, userId, removeCard, likeCard, openPopupImage) { 
+    const template = document.querySelector("#card-template").content;
+    const cardTemplate = template.querySelector('.card');
     
     const cardElement = cardTemplate.cloneNode(true),
     cardImage = cardElement.querySelector(".card__image"),
@@ -12,32 +12,32 @@ export function createCard(item, userId, removeCard, likeCard, openPopupImage) {
     likeButton = cardElement.querySelector(".card__like-button"),
     cardLikeCount = cardElement.querySelector(".card__like-count");
 
-  cardElement.id = item["_id"];
+  cardElement.id = element["_id"];
 
-  cardImage.src = item.link;
-  cardImage.alt = item.name;
-  cardTitle.textContent = item.name;
-  cardLikeCount.textContent = item.likes.length;
+  cardImage.src = element.link;
+  cardImage.alt = element.name;
+  cardTitle.textContent = element.name;
+  cardLikeCount.textContent = element.likes.length;
 
-  const isLiked = item.likes.some((like) => like._id === userId);
+  const isLiked = element.likes.some((like) => like._id === userId);
   if (isLiked) {
     likeButton.classList.add("card__like-button_is-active");
   }
 
-  if (item.owner._id === userId) {
+  if (element.owner._id === userId) {
     deleteButton.addEventListener("click", (evt) => {
-      removeCard(evt, item._id);
+      removeCard(evt, element._id);
     });
   } else {
     deleteButton.remove();
   }
 
   likeButton.addEventListener("click", (evt) => {
-    likeCard(evt, item._id);
+    likeCard(evt, element._id);
   });
 
   cardImage.addEventListener("click", function () {
-    openPopupImage(item);
+    openPopupImage(element);
   });
 
   return cardElement;
