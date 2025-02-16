@@ -29,7 +29,10 @@ const formEditProfile = document.forms["edit-profile"];
 const formEditAvatar = document.forms["edit-avatar"];
 const formAddCard = document.forms["new-place"];
 
-const btnPopup = formEditProfile.querySelector(".popup__button")
+const btnPopup = formEditProfile.querySelector(".popup__button");
+const btnAvatarPopup = formEditAvatar.querySelector(".popup__button");
+const btnNewCard = popupNewCard.querySelector(".popup__button");
+const btnFormAddCard = formAddCard.querySelector(".popup__button");
 
 const validationSettings = {
     formSelector: ".popup__form",
@@ -85,14 +88,14 @@ btnEditProfile.addEventListener("click", () => {
 
 const submitAvatarForm = (evt) => {
     evt.preventDefault();
-    toggleLoadingState(true, btnPopup);
+    toggleLoadingState(true, btnAvatarPopup);
     updateUserAvatar(formEditAvatar.link.value)
         .then((userData) => {
             btnEditAvatar.style.backgroundImage = `url(${userData.avatar})`;
             closePopup(popupChangeAvatar);
         })
         .catch(console.error)
-        .finally(() => toggleLoadingState(false, btnPopup));
+        .finally(() => toggleLoadingState(false, btnAvatarPopup));
 };
 formEditAvatar.addEventListener("submit", submitAvatarForm);
 
@@ -104,7 +107,7 @@ btnEditAvatar.addEventListener("click", () => {
 
 const submitNewCardForm = (evt) => {
     evt.preventDefault();
-    toggleLoadingState(true, btnPopup);
+    toggleLoadingState(true, btnNewCard);
     const name = formAddCard.elements.name.value;
     const link = formAddCard.elements.link.value;
     addCard({ name, link })
@@ -114,7 +117,7 @@ const submitNewCardForm = (evt) => {
             closePopup(popupNewCard);
         })
         .catch(console.error)
-        .finally(() => toggleLoadingState(false, btnPopup));
+        .finally(() => toggleLoadingState(false, btnFormAddCard));
 };
 
 formAddCard.addEventListener("submit", submitNewCardForm);
